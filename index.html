@@ -1,0 +1,109 @@
+
+<!DOCTYPE>
+
+<html>
+
+<head>
+<style>
+
+main {
+  padding: 1rem;
+  
+}
+body
+{
+  background-color: #DDDDDD;
+}
+h1
+{
+  color:green;
+  margin-top: 25px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align:center;
+}
+</style>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+
+</head>
+
+<body>
+
+<h1>COVID-19 LIVE UPDATES OF THE INDIA</h1>
+<main id="root" class="table-responsive">
+  <table id="covid_statewise_data" class="table table-dark table-striped table-bordered text-center table-hover">
+    <thead>
+      <tr>
+        <th>Sno</th>
+        <th>State</th>
+        <th>ConfirmedCases</th>
+        <th>Recovered</th>
+        <th>Deaths</th>
+        
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+</main>
+<script>
+function fetchCovidData()
+{
+  fetch('https://api.rootnet.in/covid19-in/stats/latest')
+  .then((response) => response.json())
+  .then((data) =>{
+    
+    const{regional}=data
+    createCovidTable(data.data.regional);
+  })
+  
+}
+
+
+function createCovidTable(rows) {
+  const tableBody = document.querySelector("#covid_statewise_data tbody");
+  let tableBodyHtml = "";
+
+  for (let row=1;row<rows.length;row++) {
+    const {
+      confirmedCasesForeign,
+confirmedCasesIndian,
+deaths,
+discharged,
+loc,
+totalConfirmed
+    } = rows[row];
+    
+     
+
+    tableBodyHtml += `
+        <tr>
+        <td>${row}</td>
+         <td>${loc}</td>
+            <td>${confirmedCasesIndian}</td>
+            <td>${discharged}</td>
+            
+            <td>${deaths}</td>
+            
+        </tr>
+        `;
+    }
+  
+
+  tableBody.innerHTML = tableBodyHtml;
+}
+
+fetchCovidData()
+/*
+confirmedCasesForeign: 0
+confirmedCasesIndian: 7549
+deaths: 129
+discharged: 7419
+loc: "Andaman and Nicobar Islands"
+totalConfirmed: 7549
+*/
+</script>
+</body>
+</html>
